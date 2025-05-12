@@ -1,15 +1,9 @@
 import React from 'react';
-import { View, Text, FlatList, Button, StyleSheet } from 'react-native';
-
-const therapists = [
-  { id: '1', name: 'Dr. Smith', specialty: 'Cognitive Behavioral Therapy' },
-  { id: '2', name: 'Dr. Johnson', specialty: 'Family Therapy' },
-  // Add more therapists as needed
-];
+import { View, Text, Button, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 
 const HomeScreen = ({ navigation }) => {
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>GoTherapy</Text>
       <Text style={styles.slogan}>Your mental wellness companion</Text>
 
@@ -26,28 +20,21 @@ const HomeScreen = ({ navigation }) => {
         />
       </View>
 
-      <Text style={styles.recommendationTitle}>Recommended Therapists</Text>
-      <FlatList
-        data={therapists}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View style={styles.therapistCard}>
-            <Text style={styles.therapistName}>{item.name}</Text>
-            <Text style={styles.therapistSpecialty}>{item.specialty}</Text>
-            <Button
-              title="View Details"
-              onPress={() => navigation.navigate('TherapistDetail', { therapist: item })}
-            />
-          </View>
-        )}
-      />
-    </View>
+      <Text style={styles.signupText}>
+        If you do not have an account,{' '}
+        <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+          <Text style={styles.signupLink}>Sign Up</Text>
+        </TouchableOpacity>
+      </Text>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 20,
     backgroundColor: '#f0f0f0',
   },
@@ -64,27 +51,16 @@ const styles = StyleSheet.create({
     color: '#555',
   },
   buttonContainer: {
+    width: '100%', // Full width
     marginBottom: 20,
   },
-  recommendationTitle: {
-    fontSize: 20,
+  signupText: {
+    textAlign: 'center',
+    marginTop: 20,
+  },
+  signupLink: {
+    color: '#2196F3',
     fontWeight: 'bold',
-    marginVertical: 15,
-  },
-  therapistCard: {
-    backgroundColor: '#fff',
-    padding: 15,
-    marginVertical: 10,
-    borderRadius: 8,
-    elevation: 2,
-  },
-  therapistName: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  therapistSpecialty: {
-    fontSize: 14,
-    color: '#777',
   },
 });
 

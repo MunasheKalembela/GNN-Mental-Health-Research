@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 
 const LoginScreen = ({ route, navigation }) => {
   const { userType } = route.params;
@@ -8,15 +8,11 @@ const LoginScreen = ({ route, navigation }) => {
 
   const handleLogin = () => {
     console.log(`Logging in as ${userType}:`, { email, password });
-    if (userType === 'patient') {
-      navigation.navigate('PatientHome'); // Navigate to PatientHomeScreen
-    } else {
-      navigation.navigate('TherapistHome'); // Replace with actual therapist home screen
-    }
+    navigation.navigate(userType === 'patient' ? 'PatientHome' : 'TherapistHome');
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Login as {userType === 'patient' ? 'Patient' : 'Therapist'}</Text>
       <TextInput
         style={styles.input}
@@ -35,20 +31,17 @@ const LoginScreen = ({ route, navigation }) => {
       <Button title="Login" onPress={handleLogin} />
       <Text style={styles.signupText}>
         Don't have an account?{' '}
-        <Text
-          style={styles.signupLink}
-          onPress={() => navigation.navigate('Signup')}
-        >
-          Sign Up
-        </Text>
+        <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+          <Text style={styles.signupLink}>Sign Up</Text>
+        </TouchableOpacity>
       </Text>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     justifyContent: 'center',
     padding: 20,
     backgroundColor: '#f0f0f0',
@@ -59,12 +52,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   input: {
-    height: 40,
+    height: 50,
     borderColor: '#ccc',
     borderWidth: 1,
     marginBottom: 15,
     paddingHorizontal: 10,
     borderRadius: 5,
+    width: '100%',
   },
   signupText: {
     textAlign: 'center',

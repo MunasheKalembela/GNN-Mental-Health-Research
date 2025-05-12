@@ -1,22 +1,27 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Picker } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 
-const SignupScreen = ({ navigation }) => {
+const SignUpScreen = ({ navigation }) => {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [userType, setUserType] = useState('patient');
+  const [userType, setUserType] = useState('patient'); // Default to patient
 
-  const handleSignup = () => {
-    // Implement signup logic here
-    console.log(`Signing up as ${userType}:`, { email, password });
-    // Navigate to login or home page after signup
-    navigation.navigate('Login', { userType });
+  const handleSignUp = () => {
+    console.log(`Signing up as ${userType}:`, { name, email, password });
+    // Add sign-up logic here (e.g., API call)
+    navigation.navigate(userType === 'patient' ? 'PatientHome' : 'TherapistHome');
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Sign Up</Text>
-
+      <TextInput
+        style={styles.input}
+        placeholder="Name"
+        value={name}
+        onChangeText={setName}
+      />
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -31,34 +36,33 @@ const SignupScreen = ({ navigation }) => {
         onChangeText={setPassword}
         secureTextEntry
       />
+      <View style={styles.userTypeContainer}>
+        <Button
+          title="Sign Up as Patient"
+          onPress={() => setUserType('patient')}
+          color={userType === 'patient' ? '#4CAF50' : '#ccc'}
+        />
+        <Button
+          title="Sign Up as Therapist"
+          onPress={() => setUserType('therapist')}
+          color={userType === 'therapist' ? '#2196F3' : '#ccc'}
+        />
+      </View>
+      <Button title="Create Account" onPress={handleSignUp} />
 
-      <Text style={styles.label}>I am a:</Text>
-      <Picker
-        selectedValue={userType}
-        style={styles.picker}
-        onValueChange={(itemValue) => setUserType(itemValue)}
-      >
-        <Picker.Item label="Patient" value="patient" />
-        <Picker.Item label="Therapist" value="therapist" />
-      </Picker>
-
-      <Button title="Sign Up" onPress={handleSignup} />
       <Text style={styles.loginText}>
         Already have an account?{' '}
-        <Text
-          style={styles.loginLink}
-          onPress={() => navigation.navigate('Login')}
-        >
-          Login
-        </Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Login', { userType })}>
+          <Text style={styles.loginLink}>Log In</Text>
+        </TouchableOpacity>
       </Text>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     justifyContent: 'center',
     padding: 20,
     backgroundColor: '#f0f0f0',
@@ -69,20 +73,17 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   input: {
-    height: 40,
+    height: 50,
     borderColor: '#ccc',
     borderWidth: 1,
     marginBottom: 15,
     paddingHorizontal: 10,
     borderRadius: 5,
+    width: '100%', // Full width
   },
-  label: {
-    marginBottom: 10,
-    textAlign: 'center',
-  },
-  picker: {
-    height: 50,
-    width: '100%',
+  userTypeContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginBottom: 15,
   },
   loginText: {
@@ -95,4 +96,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignupScreen;
+export default SignUpScreen;
